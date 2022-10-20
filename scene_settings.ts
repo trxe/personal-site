@@ -58,24 +58,44 @@ uniform float time;
 uniform float radius;
 uniform vec3 origin;
 
-varying vec3 v_Normal;
+varying vec3 w_Normal;
 varying vec3 v_LightDir;
 varying vec3 v_View;
 varying vec2 texCoord;
+varying mat3 normal_matrix;
 
 void main() {
-  texCoord = position.xy / radius * 0.5 + vec2(0.5);
+  mat3 rot;
+  float rotspeed = 0.5;
+  float cost = cos(time * rotspeed);
+  float sint = sin(time * rotspeed);
+  rot[0] = vec3(cost, 0.0, sint);
+  rot[1] = vec3(0.0, 1.0, 0.0);
+  rot[2] = vec3(-sint, 0.0, cost);
 
-  vec3 centroidToPoint = (modelMatrix * vec4(position, 1.0)).xyz - origin;
-  float y = (position.y - 4.0 * time);
-  vec3 rippleY = centroidToPoint * cos(1.8 * y) * abs(position.y - origin.y)/origin.y;
-  centroidToPoint = mix(centroidToPoint, rippleY, 0.1);
+  vec4 worldPos = modelMatrix * vec4(position, 1.0);
+  vec3 centroidToPoint = worldPos.xyz - origin;
+  float y = (position.y + 4.0 * time);
+
+  // distance from y-axis
+  float xz = distance(position.xz, vec2(0.0, 0.0)) / radius;
+
+  // adjust centroid by offset relative to time and distance from y-axis
+  vec3 rippleY = centroidToPoint * cos(1.8 * y) * xz;
+  centroidToPoint = mix(centroidToPoint, rippleY, 0.1 * cos(time));
+  
+  texCoord = (normalMatrix * centroidToPoint).yz / radius * 0.5 + vec2(0.5);
+
+  // Rotate entire planet
+  centroidToPoint *= rot;
+
   vec3 newWorldPos = origin + centroidToPoint;
 
   vec4 v_View4 = viewMatrix * vec4(newWorldPos, 1.0);
   v_View = v_View4.xyz / v_View4.w;
-  v_Normal = normalMatrix * normal;
-  v_LightDir = normalize(lightWorldPos - position);
+  w_Normal = normalize(centroidToPoint);
+  v_LightDir = normalize(lightWorldPos - newWorldPos);
+  normal_matrix = normalMatrix;
 
   gl_Position = projectionMatrix * v_View4;
 }
@@ -93,21 +113,24 @@ uniform float Ka;
 uniform float Kd;
 uniform float Ks;
 
-varying vec3 v_Normal;
+varying vec3 w_Normal;
+varying mat3 normal_matrix;
 varying vec3 v_LightDir;
 varying vec3 v_View;
 varying vec2 texCoord;
 
 void main() {
   vec3 normalTest = texture2D(normalMap, texCoord).xyz;
-  vec3 perturbedNorm = mix(normalTest, v_Normal, 0.5);
-  vec3 diffuseComp = diffuseColor * dot(perturbedNorm, v_LightDir);
+  vec3 perturbedNorm = normal_matrix * mix(normalTest, w_Normal, 0.5);
+  // mixes with normal for interesting effect 
+  vec3 diffuseComp = diffuseColor * max(dot(perturbedNorm, v_LightDir), 0.0);
+  // vec3 diffuseComp = mix(diffuseColor, w_Normal, cos(time * 0.5)) * max(dot(perturbedNorm, v_LightDir), 0.0);
   vec3 R = reflect(v_LightDir, perturbedNorm);
   vec3 V = normalize(v_View);
-  vec3 specularComp = specularColor * pow(max(dot(R,V), 0.0), 16.0);
-  vec3 phongShading = Ka * ambientColor + Kd * diffuseComp + Ks * specularComp;
+  vec3 specularComp = specularColor * pow(max(dot(R,V), 0.0), 32.0);
+  vec3 phong = Ka * ambientColor + Kd * diffuseComp + Ks * specularComp;
   vec3 emission = emissionColor * (0.5 * sin(time) + emissionLevel) * emissionLevel;
-  gl_FragColor = vec4(phongShading + emission, 1.0);
+  gl_FragColor = vec4(phong + emission, 1.0);
 }
 `;
 

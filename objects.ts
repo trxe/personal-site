@@ -10,14 +10,14 @@ export const PLANET_MATERIAL: Material = {
     emissionColor: new THREE.Vector3(1.0, 0.7, 1.0),
     emissionLevel: 0.9,
     Ka: 1.25,
-    Kd: 1.75,
-    Ks: 0.20,
+    Kd: 2.75,
+    Ks: 0.90,
 }
 
 export const PLANET = {
     radius: 12,
     position: new THREE.Vector3(0, 10, 0),
-    rotation: new THREE.Vector3(0, 0, -0.8),
+    rotation: new THREE.Vector3(0, -0.8, -0.8),
 }
 
 export const WATER = {
