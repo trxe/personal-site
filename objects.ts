@@ -83,7 +83,7 @@ export const getWater = (displacementMap: THREE.Texture, startTime: number) => {
             uniforms: {
                 displacementMap: new THREE.Uniform(displacementMap),
                 lightWorldPos: new THREE.Uniform(POINT_LIGHT_1.position),
-                colorA: new THREE.Uniform(new THREE.Vector3(0.0, 0.3125, 0.777)),
+                colorA: new THREE.Uniform(new THREE.Vector3(0.1, 0.3125, 0.777)),
                 colorB: new THREE.Uniform(new THREE.Vector3(220/256, 80/256, 212/256)),
                 time: new THREE.Uniform(startTime),
             },

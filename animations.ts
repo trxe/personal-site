@@ -30,3 +30,7 @@ export const moveObjectTo = (object: THREE.Object3D, position: THREE.Vector3) =>
 export const rotateObjectTo = (object: THREE.Object3D, rotation: THREE.Vector3) => {
     gsap.to(object.rotation, {duration: 1, x: rotation.x, y: rotation.y, z: rotation.z});
 }
+
+export const fadeElementToOpacity = (e: Element, opacity: number) => {
+    gsap.to(e, {duration: 1, opacity: `${opacity}%`, height: opacity == 0 ? '0%': '100%'});
+}

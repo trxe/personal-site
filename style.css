@@ -9,7 +9,19 @@
 }
 
 * {
-  font-family: 'Fredoka', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+b {
+  font-weight: 700;
+}
+
+.title, a, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Marcellus', serif;
+}
+
+li a {
+  color: white;
 }
 
 #landing-text, #works, #skills, #contact {
@@ -182,7 +194,7 @@ canvas {
 }
 
 #works-intro section p {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 #works-intro section p b {
@@ -218,7 +230,8 @@ canvas {
 }
 
 .tags span {
-  font-weight: 500;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 400;
   background-color: var(--dark);
   padding: 0.2em;
   border: 2px solid var(--light);
@@ -228,7 +241,7 @@ canvas {
 
 .project-detail p {
   margin: 0.5em 0 0 0;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .project-title a {
@@ -249,9 +262,47 @@ canvas {
   align-items: center;
 }
 
+.gallery {
+  position: relative;
+  width: 50%;
+}
+
+.gallery-slide {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-slide img, video {
+  width: 90%;
+}
+
+.gallery-prev, .gallery-next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 0 3px 3px 0;
+  background-color: var(--darker-translucent);
+  border: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.gallery-next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
 .temp-job-desc {
   width: 40%;
-  font-size: 20px;
+  font-size: 16px;
   display: flex;
   flex-flow: column nowrap;
 }
@@ -319,7 +370,7 @@ canvas {
     width: 90%;
   }
 
-  .work-page > img {
+  .work-page > img, video {
     margin-top: 3em;
     min-width: 350px;
   }

@@ -245,4 +245,42 @@ if (viewTitles) viewTitles.onclick = () => {
   moveObjectTo(camera, getCamPos().add(new THREE.Vector3(0, -20, 0)));
 }
 
+const setSlideNumber = (n: number, id: string) => {
+  const gallery = document.getElementById(id);
+  if (!gallery || n < 0) return;
+  const slides: HTMLCollectionOf<Element> = gallery.getElementsByClassName('gallery-slide');
+  if (n >= slides.length) return;
+  for (let i  = 0; i < slides.length; i++) {
+    slides[i].setAttribute('style', 'display: none;');
+  }
+  slides[n].setAttribute('style', 'display: flex;');
+}
+
+const handleGallery = (name: string) => {
+  const gallery = document.getElementById(name);
+  let index: number = 0;
+  let slideCount: number= 0;
+  // if (galleryBodyx) {
+  if (gallery) {
+    const prev: Element = gallery.getElementsByClassName('gallery-prev')[0];
+    const next: Element = gallery.getElementsByClassName('gallery-next')[0];
+    const slides: HTMLCollectionOf<Element> = gallery.getElementsByClassName('gallery-slide');
+    slideCount = slides.length;
+    setSlideNumber(index, gallery.id);
+    prev.addEventListener('click', () => {
+      index = index == 0 ? slideCount - 1 : index - 1;
+      setSlideNumber(index, gallery.id);
+    });
+    next.addEventListener('click', () => {
+      index = index == slideCount - 1 ? 0 : index + 1;
+      setSlideNumber(index, gallery.id);
+    });
+  }
+}
+
+handleGallery('bodyx');
+handleGallery('doodles-diary');
+handleGallery('theatre');
+
+
 // Debug
