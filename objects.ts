@@ -47,7 +47,7 @@ export const createFrame = (map: THREE.Texture) => {
 }
 
 // Planet
-export const getPlanet = (normalMap: THREE.Texture, startTime: number) => {
+export const getPlanet = (normalMap: THREE.Texture, startTime: number, vert: string, frag: string) => {
     const planet = new THREE.Mesh(
         new THREE.SphereGeometry(PLANET.radius, 128, 128),
         new THREE.ShaderMaterial({
@@ -66,8 +66,8 @@ export const getPlanet = (normalMap: THREE.Texture, startTime: number) => {
                 origin: new THREE.Uniform(PLANET.position),
                 time: new THREE.Uniform(startTime),
             },
-            vertexShader: _VS_ripple_sphere,
-            fragmentShader: _FS_ripple_sphere,
+            vertexShader: vert,
+            fragmentShader: frag,
         })
     );
     setPosition(planet, PLANET.position);

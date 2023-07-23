@@ -1,3 +1,6 @@
+import { Scene } from "three";
+import { getPlanet } from "./objects";
+
 const set_caret = (pos: number, parent: ChildNode | null) => {
     if (parent == null || pos < 0) return pos;
     for (let i = 0; i < parent.childNodes.length; i++) {
@@ -46,7 +49,7 @@ const get_caret_pos = (el: HTMLElement | null) => {
     return prefix.toString().length;
 };
 
-const tab_handler = (el: HTMLElement | null) => {
+const tab_handler = (el: HTMLElement | null, replacer: Function) => {
     return (e: KeyboardEvent) => {
         console.log(e.key);
         if (e.key == 'Tab') {
@@ -54,19 +57,20 @@ const tab_handler = (el: HTMLElement | null) => {
             set_caret(get_caret_pos(el), el);
         } else if (e.key == 'Enter' && e.ctrlKey) {
             e.preventDefault();
-            console.log(scrape_text(el));
+            // console.log(scrape_text(el);
+            replacer(scrape_text(el));
         }
     }
 }
 
-const format_line = (line: string, lineNo: number) => {
+const format_line = (line: string) => {
     let linep = document.createTextNode(line);
     let temp = document.createElement('div');
     temp.appendChild(linep);
     return temp;
 }
 
-export const init_editor = (el: HTMLElement | null, text: string) => {
+export const init_editor = (el: HTMLElement | null, text: string, replacer: Function) => {
     text = text.trimStart();
     if (el == null) return;
     el.innerHTML = '';
@@ -74,7 +78,7 @@ export const init_editor = (el: HTMLElement | null, text: string) => {
     for (let line of lines) {
         el.insertAdjacentElement('beforeend', line);
     }
-    el.addEventListener('keydown', tab_handler(el));
+    el.addEventListener('keydown', tab_handler(el, replacer));
 }
 
 export const get_text = (el: HTMLElement | null) => {

@@ -53,6 +53,8 @@ export const SPHERE_NORMAL_URL = new URL('./assets/water/Water_002_NORM.jpg', im
 
 // Shaders
 export const _VS_ripple_sphere = `
+// Vertex shader for the sphere. 
+// Ctrl+Enter to render
 uniform vec3 lightWorldPos;
 uniform float time;
 uniform float radius;

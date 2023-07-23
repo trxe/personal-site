@@ -75,8 +75,9 @@ scene.add(ambientLight);
  * Scene Objects
  */
 
+
 // Planet
-const planet = getPlanet(SPHERE_NORMAL, clock.elapsedTime);
+const planet = getPlanet(SPHERE_NORMAL, clock.elapsedTime, _VS_ripple_sphere, _FS_ripple_sphere);
 scene.add(planet);
 
 // Water
@@ -86,6 +87,12 @@ scene.add(water);
 // Stars
 const sky = getSky();
 scene.add(sky);
+
+let objmap = {
+  'planet': planet,
+  'water': water,
+  'sky': sky,
+};
 
 // Frames
 
@@ -118,11 +125,11 @@ renderer.setAnimationLoop(() => {
 
   // Updating Time
   elapsedTime += clock.getDelta();
-  planet.material.uniforms.time.value = elapsedTime;
-  water.material.uniforms.time.value = elapsedTime;
+  objmap.planet.material.uniforms.time.value = elapsedTime;
+  objmap.water.material.uniforms.time.value = elapsedTime;
 
   // Rotating the sky
-  sky.rotation.y += 0.001;
+  objmap.sky.rotation.y += 0.001;
 
   // Rendering and composing
   renderer.render(scene, camera);
@@ -162,6 +169,12 @@ window.addEventListener('mousemove', onMouseMove);
  * Onclick handlers
  */
 
+const replacer = (vert: string) => {
+  scene.remove(objmap.planet);
+  objmap.planet = getPlanet(SPHERE_NORMAL, clock.elapsedTime, vert, _FS_ripple_sphere);
+  scene.add(objmap.planet)
+}
+
 const sandbox = document.getElementById('link-sandbox');
 const sandboxLabel: string | null = sandbox ? sandbox.textContent : '';
 if (sandbox) sandbox.onclick = () => {
@@ -170,8 +183,8 @@ if (sandbox) sandbox.onclick = () => {
       behavior: 'smooth'
     });
     sandbox.focus();
-    init_editor(document.getElementById('shader-editor'), _VS_ripple_sphere);
-    focusOneLink('link-sandbox', 200);
+    init_editor(document.getElementById('shader-editor'), _VS_ripple_sphere, replacer);
+    focusOneLink('link-sandbox', 0);
     fadeToPageOpacity('landing-text', 0);
     fadeToPageOpacity('sandbox', 100);
     currentPage = 'link-sandbox'
@@ -197,7 +210,7 @@ if (skills) skills.onclick = () => {
     focusOneLink('link-skills', 200);
     moveObjectTo(camera, new THREE.Vector3(5, CAMERA_SETTINGS.position.y, 20));
     fadeToPageOpacity('landing-text', 0);
-    fadeToPageOpacity('skills', 100);
+    fadeToPageOpacity('skills', 300);
     currentPage = 'link-skills'
     skills.textContent = 'back';
   } else {
@@ -216,7 +229,7 @@ const contactLabel: string | null = contact ? contact.textContent : '';
 if (contact) contact.onclick = () => {
   if (currentPage !== 'link-contact') {
     contact.focus();
-    focusOneLink('link-contact', 100);
+    focusOneLink('link-contact', 200);
     fadeToPageOpacity('contact', 100);
     currentPage = 'link-contact'
     contact.textContent = 'back';

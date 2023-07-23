@@ -7,7 +7,7 @@ Made possible with three.js and
 Looks drab now, but look forward to:
 - [ ] More SVG icons
 - [x] Galleries for each project
-- [ ] Shader code sandbox
+- [x] Shader code sandbox
 
 ## How to build
 
