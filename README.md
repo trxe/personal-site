@@ -6,7 +6,7 @@ but just contains just the `.ts` files and assets.
 Made possible with three.js and 
 Looks drab now, but look forward to:
 - [ ] More SVG icons
-- [ ] Galleries for each project
+- [x] Galleries for each project
 - [ ] Shader code sandbox
 
 ## How to build

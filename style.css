@@ -24,7 +24,7 @@ li a {
   color: white;
 }
 
-#landing-text, #works, #skills, #contact {
+#landing-text, #works, #skills, #contact, #sandbox {
   position: fixed;
   z-index: 999;
   top: 1em;
@@ -34,9 +34,37 @@ li a {
   color: var(--font);
 }
 
-#landing-text, #works > *, #skills > *, #contact > * {
+#landing-text, #works > *, #skills > *, #contact > *, #sandbox > * {
   z-index: 100;
   padding: 0.5rem 1.0rem 0.5rem 1.0rem;
+}
+
+#sandbox {
+  z-index: 102;
+  opacity: 0;
+  overflow-y: auto;
+  display: flex;
+}
+
+.editor {
+  width: 50%;
+  background-color: var(--darker-translucent);
+  border: none;
+  outline: none;
+  counter-reset: line;
+}
+
+.editor div {
+  font-family: 'IBM Plex Mono', monospace;
+  white-space: break-spaces;
+}
+
+.editor div::before {
+  content: counter(line);
+  counter-increment: line;
+  position: relative;
+  padding-right: 2em;
+  color: var(--light);
 }
 
 #works {

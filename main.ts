@@ -11,6 +11,7 @@ import { aspect, getCamPos, setPosition } from './utils';
 import { ambientLight, pointLightOne } from './lights';
 import { getPlanet, getSky, getWater } from './objects';
 import { fadeToPageOpacity, floatInPageLinks, focusOneLink, moveObjectTo, revertLink, rotateObjectTo } from './animations';
+import { init_editor } from './editor';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -160,6 +161,30 @@ window.addEventListener('mousemove', onMouseMove);
 /**
  * Onclick handlers
  */
+
+const sandbox = document.getElementById('link-sandbox');
+const sandboxLabel: string | null = sandbox ? sandbox.textContent : '';
+if (sandbox) sandbox.onclick = () => {
+  if (currentPage !== 'link-sandbox') {
+    document.querySelector('#link-sandbox')?.scrollIntoView({
+      behavior: 'smooth'
+    });
+    sandbox.focus();
+    init_editor(document.getElementById('shader-editor'), _VS_ripple_sphere);
+    focusOneLink('link-sandbox', 200);
+    fadeToPageOpacity('landing-text', 0);
+    fadeToPageOpacity('sandbox', 100);
+    currentPage = 'link-sandbox'
+    sandbox.textContent = 'back';
+  } else {
+    sandbox.blur();
+    revertLink('link-sandbox');
+    fadeToPageOpacity('landing-text', 100);
+    fadeToPageOpacity('sandbox', 0);
+    currentPage = 'landing-text';
+    sandbox.textContent = sandboxLabel;
+  }
+};
 
 const skills = document.getElementById('link-skills');
 const skillsLabel: string | null = skills ? skills.textContent : '';
